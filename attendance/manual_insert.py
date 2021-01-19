@@ -34,8 +34,9 @@ def get_commit(commit_url):
         "message": message,
         }
 
-# commit_url = 'https://github.com/gintire/TIL/commit/f7c915de5e029270744553ca2b0f88da823e44c5'
-commit_url = 'https://github.com/gintire/TIL/commit/93a4f58de89830b9cca0f1d554c2fe3656531bc3'
+commit_url = 'https://github.com/gintire/TIL/commit/f7c915de5e029270744553ca2b0f88da823e44c5'
+#commit_url = 'https://github.com/gintire/TIL/commit/93a4f58de89830b9cca0f1d554c2fe3656531bc3'
+#commit_url = 'https://github.com/js7483/ddd-study/commit/94e153a2ffa1768c1843f414375616d73c68b93a'
 
 commit = get_commit(commit_url)
 # print(commit)
