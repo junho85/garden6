@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'attendance.apps.AttendanceConfig',
+    'common.apps.CommonConfig',
 ]
 
 MIDDLEWARE = [
