@@ -7,6 +7,10 @@
 
 ## project
 ```
+docker start mymongo
+```
+
+```
 source venv/bin/activate
 python manage.py runserver
 ```

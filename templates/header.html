@@ -8,6 +8,9 @@
                     <circle cx="12" cy="13" r="4"/>
                 </svg>
                 <strong>정원사들 시즌6</strong>
+                {% if user.is_authenticated %}
+                    <a class="nav-link" href="{% url 'common:logout' %}">{{ user.username }} (로그아웃)</a>
+                {% endif %}
             </a>
         </div>
     </div>

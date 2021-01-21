@@ -37,7 +37,8 @@ def get_commit(commit_url):
 # commit_url = 'https://github.com/gintire/TIL/commit/f7c915de5e029270744553ca2b0f88da823e44c5'
 #commit_url = 'https://github.com/gintire/TIL/commit/93a4f58de89830b9cca0f1d554c2fe3656531bc3'
 #commit_url = 'https://github.com/js7483/ddd-study/commit/94e153a2ffa1768c1843f414375616d73c68b93a'
-commit_url = 'https://github.com/Wealgo/changmin/commit/d6ecda2127ee11d2741bb42258affaf2e803bcb0'
+# commit_url = 'https://github.com/Wealgo/changmin/commit/d6ecda2127ee11d2741bb42258affaf2e803bcb0'
+commit_url = 'https://github.com/itsnamgyu/TIW/commit/f3d807901dc16d1c049dc14c02c1916234af8abc'
 
 commit = get_commit(commit_url)
 # print(commit)
