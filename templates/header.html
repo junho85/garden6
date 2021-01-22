@@ -10,6 +10,8 @@
                 <strong>정원사들 시즌6</strong>
                 {% if user.is_authenticated %}
                     <a class="nav-link" href="{% url 'common:logout' %}">{{ user.username }} (로그아웃)</a>
+                {% else %}
+                    <a class="nav-link" href="{% url 'common:login' %}">로그인</a>
                 {% endif %}
             </a>
         </div>

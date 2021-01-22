@@ -18,7 +18,7 @@ def index(request):
 # 정원사들 리스트
 def users(request):
     garden = Garden()
-    users = garden.get_member()
+    users = garden.get_users()
     return JsonResponse(users, safe=False)
 
 
@@ -82,7 +82,7 @@ def gets(request):
 
     result = []
 
-    users = garden.get_member()
+    users = garden.get_users()
     for user in users:
         attendances = garden.find_attendance_by_user(user)
 

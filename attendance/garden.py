@@ -1,57 +1,25 @@
-import configparser
 from datetime import date, timedelta, datetime
-import slack
 import pymongo
 import pprint
-import os
-import yaml
+from attendance.slack_tools import SlackTools
+from attendance.mongo_tools import MongoTools
+from attendance.config_tools import ConfigTools
 
 
 class Garden:
     def __init__(self):
-        config = configparser.ConfigParser()
-        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-        path = os.path.join(BASE_DIR, 'config.ini')
-        config.read(path)
+        self.config_tools = ConfigTools()
+        self.slack_tools = SlackTools()
+        self.mongo_tools = MongoTools()
 
-        slack_api_token = config['DEFAULT']['SLACK_API_TOKEN']
-        self.slack_client = slack.WebClient(token=slack_api_token)
+        self.slack_client = self.slack_tools.get_slack_client()
+        self.channel_id = self.slack_tools.get_channel_id()
 
-        self.channel_id = config['DEFAULT']['CHANNEL_ID']
+        self.gardening_days = self.config_tools.get_gardening_days()
+        self.start_date = self.config_tools.get_start_day()
 
-        self.mongo_database = config['MONGO']['DATABASE']
-        self.mongo_host = config['MONGO']['HOST']
-        self.mongo_port = config['MONGO']['PORT']
-
-        self.gardening_days = config['DEFAULT']['GARDENING_DAYS']
-
-        # mongodb collections
-        self.mongo_collection_slack_message = "slack_messages"
-
-        # users list ['junho85', 'user2', 'user3']
-        # self.users = config['GITHUB']['USERS'].split(',')
-
-        # users_with_slackname
-        path = os.path.join(BASE_DIR, 'users.yaml')
-
-        with open(path) as file:
-            self.users_with_slackname = yaml.full_load(file)
-
+        self.users_with_slackname = self.config_tools.load_users()
         self.users = list(self.users_with_slackname.keys())
-
-        self.start_date = datetime.strptime(config['DEFAULT']['START_DATE'],
-                                            "%Y-%m-%d").date()  # start_date e.g.) 2021-01-18
-
-    def connect_mongo(self):
-        return pymongo.MongoClient("mongodb://%s:%s" % (self.mongo_host, self.mongo_port))
-
-    def get_database(self):
-        conn = self.connect_mongo()
-
-        return conn.get_database(self.mongo_database)
-
-    def get_member(self):
-        return self.users
 
     def get_gardening_days(self):
         return self.gardening_days
@@ -59,9 +27,11 @@ class Garden:
     '''
     github userid - slack username
     '''
-
-    def get_members(self):
+    def get_users_with_slackname(self):
         return self.users_with_slackname
+
+    def get_users(self):
+        return self.users
 
     def find_attend(self, oldest, latest):
         print("find_attend")
@@ -70,10 +40,7 @@ class Garden:
         print(latest)
         print(datetime.fromtimestamp(latest))
 
-        conn = self.connect_mongo()
-
-        db = conn.get_database(self.mongo_database)
-        mongo_collection = db.get_collection(self.mongo_collection_slack_message)
+        mongo_collection = self.mongo_tools.get_collection()
 
         for message in mongo_collection.find(
                 {"ts_for_db": {"$gte": datetime.fromtimestamp(oldest), "$lt": datetime.fromtimestamp(latest)}}):
@@ -83,10 +50,7 @@ class Garden:
     # 특정 유저의 전체 출석부를 생성함
     # TODO 출석부를 DB에 넣고 마지막 생성된 출석부 이후의 데이터로 추가 출석부 만들도록 하자
     def find_attendance_by_user(self, user):
-        conn = self.connect_mongo()
-
-        db = conn.get_database(self.mongo_database)
-        mongo_collection = db.get_collection(self.mongo_collection_slack_message)
+        mongo_collection = self.mongo_tools.get_collection()
 
         result = {}
 
@@ -140,10 +104,7 @@ class Garden:
             count=1000
         )
 
-        conn = self.connect_mongo()
-
-        db = conn.get_database(self.mongo_database)
-        mongo_collection = db.get_collection(self.mongo_collection_slack_message)
+        mongo_collection = self.mongo_tools.get_collection()
 
         for message in response["messages"]:
             message["ts_for_db"] = datetime.fromtimestamp(float(message["ts"]))
@@ -159,11 +120,7 @@ class Garden:
     db 에 수집한 slack 메시지 삭제
     """
     def remove_all_slack_messages(self):
-        conn = self.connect_mongo()
-
-        db = conn.get_database(self.mongo_database)
-
-        mongo_collection = db.get_collection(self.mongo_collection_slack_message)
+        mongo_collection = self.mongo_tools.get_collection()
         mongo_collection.remove()
 
     """
@@ -196,7 +153,7 @@ class Garden:
         return result_attendance
 
     def send_no_show_message(self):
-        members = self.get_members()
+        members = self.get_users_with_slackname()
         today = datetime.today().date()
 
         message = "[미출석자 알람]\n"
@@ -211,11 +168,3 @@ class Garden:
             link_names=1
         )
 
-    def test_slack(self):
-        # self.slack_client.chat_postMessage(
-        #     channel='#junekim', # temp
-        #     text='@junho85 test',
-        #     link_names=1
-        # )
-        response = self.slack_client.users_list()
-        print(response)

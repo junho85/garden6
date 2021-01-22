@@ -1,6 +1,4 @@
 from garden import Garden
-from datetime import date, datetime, timedelta
-import slack
 
 garden = Garden()
 
