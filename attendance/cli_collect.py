@@ -1,4 +1,4 @@
-from garden import Garden
+from attendance.garden import Garden
 from datetime import date, datetime, timedelta
 
 garden = Garden()
