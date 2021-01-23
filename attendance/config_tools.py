@@ -7,7 +7,7 @@ import yaml
 class ConfigTools:
     def __init__(self):
         self.config = self.load_config()
-        pass
+        self.users = self.load_users()
 
     def load_config(self):
         config = configparser.ConfigParser()
@@ -38,3 +38,9 @@ class ConfigTools:
             users_with_slackname = yaml.full_load(file)
 
         return users_with_slackname
+
+    def get_users(self):
+        return self.users
+
+    def get_user_slacknames(self):
+        return [self.users[user]["slack"] for user in self.users]

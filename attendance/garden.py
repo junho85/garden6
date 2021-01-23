@@ -18,7 +18,7 @@ class Garden:
         self.gardening_days = self.config_tools.get_gardening_days()
         self.start_date = self.config_tools.get_start_day()
 
-        self.users_with_slackname = self.config_tools.load_users()
+        self.users_with_slackname = self.config_tools.get_users()
         self.users = list(self.users_with_slackname.keys())
 
     def get_gardening_days(self):
