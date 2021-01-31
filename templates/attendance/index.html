@@ -341,7 +341,7 @@ ${data_row.user}
             let context = {
                 total_attend_count: 0, // 전체 출석 카운트
                 total_noshow_count: 0, // 전체 미출석 카운트
-                start_day: new Date(2021, 1-1, 18), // 시작일 2021.01.18
+                start_day: new Date("{{ start_date }}"), // 시작일 e.g. 2021.01.18
                 today: new Date(), // 오늘
                 formatted_today: moment().format("YYYY-MM-DD"),
                 yesterday: new Date(new Date().setDate(new Date().getDate()-1)), // 어제

@@ -22,8 +22,11 @@ class ConfigTools:
     def get_gardening_days(self):
         return self.config['DEFAULT']['GARDENING_DAYS']
 
-    def get_start_day(self):
-        return datetime.strptime(self.config['DEFAULT']['START_DATE'],
+    def get_start_date_str(self):
+        return self.config['DEFAULT']['START_DATE']
+
+    def get_start_date(self):
+        return datetime.strptime(self.get_start_date_str(),
                           "%Y-%m-%d").date()  # start_date e.g.) 2021-01-18
 
     '''

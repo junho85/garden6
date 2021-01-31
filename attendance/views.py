@@ -10,6 +10,7 @@ from python_markdown_slack import PythonMarkdownSlack
 def index(request):
     garden = Garden()
     context = {
+        "start_date": garden.get_start_date_str(),
         "gardening_days": garden.get_gardening_days()
     }
     return render(request, 'attendance/index.html', context)

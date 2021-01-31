@@ -16,13 +16,20 @@ class Garden:
         self.channel_id = self.slack_tools.get_channel_id()
 
         self.gardening_days = self.config_tools.get_gardening_days()
-        self.start_date = self.config_tools.get_start_day()
+        self.start_date = self.config_tools.get_start_date()
+        self.start_date_str = self.config_tools.get_start_date_str()
 
         self.users_with_slackname = self.config_tools.get_users()
         self.users = list(self.users_with_slackname.keys())
 
     def get_gardening_days(self):
         return self.gardening_days
+
+    def get_start_date(self):
+        return self.start_date
+
+    def get_start_date_str(self):
+        return self.start_date_str
 
     '''
     github userid - slack username
