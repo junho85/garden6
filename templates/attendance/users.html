@@ -12,6 +12,11 @@
 </style>
 <script>
 
+let context = {
+    start_day: new Date("{{ start_date }}"), // 시작일 e.g. 2021.01.18
+    total_days: {{ gardening_days }}, // 100일간 진행함
+};
+
 function draw_calendar(attendances) {
     // convert data
     let attendances_by_date = {};
@@ -54,7 +59,9 @@ function draw_calendar(attendances) {
     } else {
         endday = today;
     }
-    const dates = getDates(new Date(2021, 1-1, 18-1), endday);
+    const firstSunday = new Date(context.start_day)
+    firstSunday.setDate(firstSunday.getDate() - context.start_day.getDay())
+    const dates = getDates(firstSunday, endday);
     $.each(dates, function (idx, date) {
         if (idx % 7 === 0) {
             html += `<tr>`;

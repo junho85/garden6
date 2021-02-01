@@ -33,6 +33,7 @@ def user(request, user):
     garden = Garden()
     context = {
         "user": user,
+        "start_date": garden.get_start_date_str(),
         "gardening_days": garden.get_gardening_days()
     }
 

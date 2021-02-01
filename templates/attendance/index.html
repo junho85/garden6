@@ -355,7 +355,7 @@ ${data_row.user}
                 attendance_count_by_weekdays: {}, // 요일별 출석수
             };
 
-            // 출석부 날짜 범위 2021.01.18 ~ 오늘 (단, 마지막 날 까지만)
+            // 출석부 날짜 범위 e.g. 2021.01.18 ~ 오늘 (단, 마지막 날 까지만)
             for (let d = context.start_day; d <= context.today; d.setDate(d.getDate() + 1)) {
                 context.formatted_dates.push(moment(d).format("YYYY-MM-DD"));
 
