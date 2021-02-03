@@ -11,10 +11,15 @@
 }
 </style>
 <script>
+Date.prototype.addDays = function(days) {
+    var date = new Date(this.valueOf());
+    date.setDate(date.getDate() + days);
+    return date;
+}
 
 let context = {
     start_day: new Date("{{ start_date }}"), // 시작일 e.g. 2021.01.18
-    total_days: {{ gardening_days }}, // 100일간 진행함
+    total_days: {{ gardening_days }}, // 진행일수 e.g. 100일
 };
 
 function draw_calendar(attendances) {
@@ -52,7 +57,7 @@ function draw_calendar(attendances) {
 </thead>
 <tbody>`;
     let today = new Date();
-    let lastday = new Date(2021, 1-1, 18 + {{ gardening_days }} - 1);
+    let lastday = context.start_day.addDays(context.total_days - 1);
     let endday;
     if (lastday < today) {
         endday = lastday;
@@ -71,12 +76,11 @@ function draw_calendar(attendances) {
         if (formatted_date in attendances_by_date) {
             message += `${formatted_date}<br><span class="attend-emoji">😀<span>`;
         } else {
-            if (date < new Date(2021, 1-1, 18)) {
+            if (date < context.start_day) {
                 message = "";
             } else {
                 message = `${formatted_date}<br><span class="attend-emoji">😰<span>`;
             }
-
         }
         html += `<td>
 <div>
