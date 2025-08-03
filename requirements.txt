@@ -1,6 +1,6 @@
-slackclient
-Django
-pymongo
-pyyaml
-python-markdown-slack
-requests
+slackclient==2.9.4
+Django>=4.2,<5.0
+pymongo>=4.0.0
+PyYAML>=6.0
+Markdown>=3.4.0
+requests>=2.28.0

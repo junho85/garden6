@@ -1,0 +1,4 @@
+# Garden6 MongoDB to Supabase Migration Dependencies
+psycopg2-binary>=2.9.0
+pymongo>=4.0.0
+pyyaml>=6.0

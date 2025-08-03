@@ -1,0 +1,21 @@
+; Garden6 MongoDB to Supabase Migration Configuration
+; 이 파일을 migration_config.ini로 복사하여 실제 값을 입력하세요
+
+[SUPABASE]
+; Supabase PostgreSQL 연결 정보
+HOST = aws-0-ap-northeast-2.pooler.supabase.com
+PORT = 6543
+DATABASE = postgres
+USER = postgres.your_project_id
+PASSWORD = your_password
+SCHEMA = garden6
+
+[MONGODB]
+; MongoDB 덤프 파일 경로
+BSON_FILE_PATH = /Users/junho85/PycharmProjects/garden6/archive/mongodb_dump/slack_messages.bson
+
+[MIGRATION]
+; 마이그레이션 설정
+BATCH_SIZE = 1000
+; 로그 레벨: DEBUG, INFO, WARNING, ERROR, CRITICAL
+LOG_LEVEL = INFO
