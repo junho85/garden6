@@ -93,7 +93,9 @@ archive/migration/
 ├── migration_config.yaml        # 실제 설정 파일 (gitignore 권장)
 ├── supabase_schema.sql         # 스키마 DDL
 ├── create_schema.py            # 스키마 생성 스크립트
-└── migrate_to_supabase.py      # 데이터 마이그레이션 스크립트
+├── migrate_to_supabase.py      # 데이터 마이그레이션 스크립트
+└── 20250803_mongodb_dump/      # MongoDB 덤프 파일들
+    └── slack_messages.bson
 ```
 
 ## 데이터베이스 스키마

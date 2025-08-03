@@ -6,7 +6,7 @@ Garden6 Supabase 스키마 생성 스크립트
 """
 import psycopg2
 import os
-import configparser
+import yaml
 import logging
 import sys
 
@@ -15,27 +15,29 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 def load_config():
-    """설정 파일 로드"""
-    config = configparser.ConfigParser()
-    config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'migration_config.ini')
+    """YAML 설정 파일 로드"""
+    config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'migration_config.yaml')
     
     if not os.path.exists(config_path):
         logger.error(f"설정 파일을 찾을 수 없습니다: {config_path}")
-        logger.info("migration_config.ini.sample을 migration_config.ini로 복사하고 설정을 입력하세요.")
+        logger.info("migration_config.yaml.sample을 migration_config.yaml로 복사하고 설정을 입력하세요.")
         sys.exit(1)
     
-    config.read(config_path)
+    with open(config_path, 'r', encoding='utf-8') as f:
+        config = yaml.safe_load(f)
+    
     return config
 
 def create_connection(config):
     """PostgreSQL 연결 생성"""
     try:
+        supabase_config = config['supabase']
         db_config = {
-            'database': config.get('SUPABASE', 'DATABASE'),
-            'host': config.get('SUPABASE', 'HOST'),
-            'port': config.getint('SUPABASE', 'PORT'),
-            'user': config.get('SUPABASE', 'USER'),
-            'password': config.get('SUPABASE', 'PASSWORD'),
+            'database': supabase_config['database'],
+            'host': supabase_config['host'],
+            'port': supabase_config['port'],
+            'user': supabase_config['user'],
+            'password': supabase_config['password'],
             'sslmode': 'require',
             'gssencmode': 'disable'
         }
@@ -64,7 +66,7 @@ def create_schema():
     
     # 설정 로드
     config = load_config()
-    schema_name = config.get('SUPABASE', 'SCHEMA', fallback='garden6')
+    schema_name = config['supabase'].get('schema', 'garden6')
     
     # DB 연결
     print("1. PostgreSQL 연결 중...")
@@ -141,7 +143,7 @@ def create_schema():
         
         print(f"\n✅ {schema_name} 스키마가 성공적으로 생성되었습니다!")
         print("\n다음 단계:")
-        print("1. migration_config.ini 파일을 확인하세요")
+        print("1. migration_config.yaml 파일을 확인하세요")
         print("2. python migrate_to_supabase.py 를 실행하여 데이터를 마이그레이션하세요")
         
     except Exception as e:

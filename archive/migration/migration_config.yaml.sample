@@ -12,7 +12,7 @@ supabase:
 
 # MongoDB 덤프 파일 정보
 mongodb:
-  bson_file_path: /Users/junho85/PycharmProjects/garden6/archive/mongodb_dump/slack_messages.bson
+  bson_file_path: mongodb_dump/slack_messages.bson
 
 # 마이그레이션 설정
 migration:

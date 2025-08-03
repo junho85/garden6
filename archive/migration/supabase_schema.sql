@@ -1,8 +1,8 @@
--- Supabase garden5 스키마 생성
-CREATE SCHEMA IF NOT EXISTS garden5;
+-- Supabase garden6 스키마 생성
+CREATE SCHEMA IF NOT EXISTS garden6;
 
--- garden5 스키마로 전환
-SET search_path TO garden5;
+-- garden6 스키마로 전환
+SET search_path TO garden6;
 
 -- slack_messages 테이블 생성 (JSONB 방식으로 MongoDB 구조 유지)
 CREATE TABLE slack_messages (
