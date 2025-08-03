@@ -1,16 +1,12 @@
 from datetime import datetime
-
 from garden import Garden
 import pprint
 import requests
-
+import json
 from urllib.parse import urlparse
 
 garden = Garden()
-
-db = garden.get_database()
-
-mongo_collection = db.get_collection("slack_messages")
+db_tools = garden.db_tools
 
 def get_commit(commit_url):
     parse_result = urlparse(commit_url)
@@ -68,8 +64,27 @@ print(message)
 
 
 try:
-    result = mongo_collection.insert_one(message)
-    pprint.pprint(result)
+    # PostgreSQL에 데이터 삽입
+    insert_query = """
+        INSERT INTO slack_messages (ts, ts_for_db, bot_id, type, text, "user", team, bot_profile, attachments)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+        ON CONFLICT (ts) DO NOTHING
+    """
+    
+    params = (
+        message['ts'],
+        message['ts_for_db'],
+        message.get('bot_id'),
+        message.get('type'),
+        message.get('text'),
+        message.get('user'),
+        message.get('team'),
+        None,  # bot_profile
+        json.dumps(message.get('attachments')) if message.get('attachments') else None
+    )
+    
+    result = db_tools.execute_query(insert_query, params, fetch_all=False)
+    print(f"Inserted {result} rows")
     print(message)
 except Exception as e:
     print(e)
