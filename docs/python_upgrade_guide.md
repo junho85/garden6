@@ -98,18 +98,72 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 - `force_text()` → `force_str()`
 - 기타 Django 4.2 변경사항 반영
 
-### 4.3 Markdown 패키지 추가
+### 4.3 Markdown 패키지 추가 및 Slack Markdown 처리
 Python 3.11 업그레이드 과정에서 Markdown 렌더링 기능을 위해 패키지 추가:
-```python
-# requirements.txt에 추가
+
+**requirements.txt에 추가**
+```txt
 Markdown>=3.4.0
-
-# views.py에서 사용 예시
-import markdown
-
-def render_markdown(text):
-    return markdown.markdown(text)
 ```
+
+**Slack Markdown 처리를 위한 커스텀 확장 구현**
+
+기존에 사용하던 `python-markdown-slack` 패키지 대신 커스텀 확장을 구현:
+
+```python
+# slack_markdown.py
+import re
+import markdown
+from markdown.extensions import Extension
+from markdown.preprocessors import Preprocessor
+
+class SlackMarkdownPreprocessor(Preprocessor):
+    """Slack 특수 문법을 일반 마크다운으로 변환"""
+    
+    def run(self, lines):
+        text = '\n'.join(lines)
+        
+        # Slack 사용자 멘션 처리: <@U12345> -> @user
+        text = re.sub(r'<@([UW][A-Z0-9]+)>', r'@\1', text)
+        
+        # Slack 채널 멘션 처리: <#C12345|channel> -> #channel
+        text = re.sub(r'<#([C][A-Z0-9]+)\|([^>]+)>', r'#\2', text)
+        
+        # Slack URL 처리: <http://example.com|text> -> [text](http://example.com)
+        text = re.sub(r'<(https?://[^|>]+)\|([^>]+)>', r'[\2](\1)', text)
+        
+        return text.split('\n')
+
+class SlackMarkdownExtension(Extension):
+    """Slack Markdown 확장"""
+    
+    def extendMarkdown(self, md):
+        md.preprocessors.register(
+            SlackMarkdownPreprocessor(md),
+            'slack_markdown',
+            175
+        )
+
+def slack_markdown_to_html(text):
+    """Slack 마크다운 텍스트를 HTML로 변환"""
+    if not text:
+        return text
+    
+    md = markdown.Markdown(extensions=[SlackMarkdownExtension()])
+    return md.convert(text)
+
+# views.py에서 사용
+from .slack_markdown import slack_markdown_to_html
+
+def user_api(request, user):
+    # ... 다른 코드 ...
+    commit["message"][0] = slack_markdown_to_html(commit["message"][0])
+```
+
+**변경 이유:**
+- 기존 `python-markdown-slack` 패키지의 Python 3.11 호환성 문제
+- 프로젝트 요구사항에 맞는 커스텀 처리 로직 필요
+- 의존성 감소 및 유지보수성 향상
 
 ### 4.4 타입 힌트 추가 (선택사항)
 Python 3.11의 향상된 타입 힌트 기능 활용:
