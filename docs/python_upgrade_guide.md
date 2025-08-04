@@ -98,7 +98,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 - `force_text()` → `force_str()`
 - 기타 Django 4.2 변경사항 반영
 
-### 4.3 타입 힌트 추가 (선택사항)
+### 4.3 Markdown 패키지 추가
+Python 3.11 업그레이드 과정에서 Markdown 렌더링 기능을 위해 패키지 추가:
+```python
+# requirements.txt에 추가
+Markdown>=3.4.0
+
+# views.py에서 사용 예시
+import markdown
+
+def render_markdown(text):
+    return markdown.markdown(text)
+```
+
+### 4.4 타입 힌트 추가 (선택사항)
 Python 3.11의 향상된 타입 힌트 기능 활용:
 ```python
 from typing import List, Dict, Optional
