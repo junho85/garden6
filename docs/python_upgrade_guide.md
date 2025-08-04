@@ -59,7 +59,7 @@ slackclient==2.5.0
 **새로운 requirements.txt (Python 3.11)**
 ```txt
 Django>=4.2,<5.0
-psycopg2-binary>=2.9.0
+pymongo>=4.0.0
 slackclient==2.9.4
 PyYAML>=6.0
 Markdown>=3.4.0
@@ -107,30 +107,9 @@ def process_data(items: List[str]) -> Dict[str, int]:
     return {item: len(item) for item in items}
 ```
 
-## 5. Docker 이미지 업데이트
+## 5. 테스트 및 검증
 
-### 5.1 Dockerfile 수정
-```dockerfile
-# 기존
-FROM python:3.7-slim
-
-# 변경
-FROM python:3.11-slim
-```
-
-### 5.2 시스템 패키지 업데이트
-PostgreSQL 클라이언트 등 필요한 시스템 패키지 설치:
-```dockerfile
-RUN apt-get update && apt-get install -y \
-    gcc \
-    python3-dev \
-    libpq-dev \
-    && rm -rf /var/lib/apt/lists/*
-```
-
-## 6. 테스트 및 검증
-
-### 6.1 단위 테스트
+### 5.1 단위 테스트
 ```bash
 # Django 테스트 실행
 python manage.py test
@@ -139,49 +118,49 @@ python manage.py test
 python manage.py test attendance
 ```
 
-### 6.2 통합 테스트
+### 5.2 통합 테스트
 - 모든 주요 기능 동작 확인
 - API 엔드포인트 테스트
 - 데이터베이스 연결 및 쿼리 확인
 
-### 6.3 성능 테스트
+### 5.3 성능 테스트
 - 응답 시간 비교
 - 메모리 사용량 확인
 - CPU 사용률 모니터링
 
-## 7. 배포
+## 6. 배포
 
-### 7.1 단계적 배포
+### 6.1 단계적 배포
 1. 개발 환경에서 충분한 테스트
 2. 스테이징 환경 배포
 3. 일부 사용자 대상 카나리 배포
 4. 전체 프로덕션 배포
 
-### 7.2 롤백 계획
-- 이전 버전 Docker 이미지 보관
+### 6.2 롤백 계획
+- 이전 버전의 가상환경 보관
 - 데이터베이스 백업
 - 빠른 롤백을 위한 스크립트 준비
 
-## 8. 주의사항
+## 7. 주의사항
 
-### 8.1 호환성 이슈
+### 7.1 호환성 이슈
 - `collections.abc` 모듈 import 변경
 - `asyncio` 관련 변경사항
 - 문자열 포맷팅 개선사항
 
-### 8.2 성능 고려사항
+### 7.2 성능 고려사항
 - Python 3.11은 일반적으로 10-60% 더 빠름
 - 메모리 사용량 개선
 - 시작 시간 단축
 
-### 8.3 보안 개선사항
+### 7.3 보안 개선사항
 - 최신 보안 패치 적용
 - SSL/TLS 라이브러리 업데이트
 - 취약점 스캔 도구 실행
 
-## 9. 문제 해결
+## 8. 문제 해결
 
-### 9.1 일반적인 오류들
+### 8.1 일반적인 오류들
 
 **ImportError**
 ```python
@@ -201,12 +180,12 @@ from django.utils.encoding import force_text
 from django.utils.encoding import force_str
 ```
 
-### 9.2 디버깅 팁
+### 8.2 디버깅 팁
 - `pip check` 명령으로 패키지 호환성 확인
 - `python -m py_compile` 로 구문 오류 확인
 - 로그 레벨을 DEBUG로 설정하여 상세 정보 확인
 
-## 10. 참고 자료
+## 9. 참고 자료
 
 - [Python 3.11 Release Notes](https://docs.python.org/3/whatsnew/3.11.html)
 - [Django 4.2 Release Notes](https://docs.djangoproject.com/en/4.2/releases/4.2/)
