@@ -6,13 +6,13 @@ supabase:
   host: aws-0-ap-northeast-2.pooler.supabase.com
   port: 6543
   database: postgres
-  user: postgres.your_project_id
+  user: postgres.schejihwxwsvaduhpkbe
   password: your_password
   schema: garden6
 
 # MongoDB 덤프 파일 정보
 mongodb:
-  bson_file_path: mongodb_dump/slack_messages.bson
+  bson_file_path: 20250803_mongodb_dump/slack_messages.bson
 
 # 마이그레이션 설정
 migration:
