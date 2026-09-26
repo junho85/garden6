@@ -4,3 +4,7 @@ users.yaml
 venv
 .venv
 .idea
+
+# Python
+__pycache__/
+*.pyc
