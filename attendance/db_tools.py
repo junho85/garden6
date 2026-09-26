@@ -13,12 +13,12 @@ class DBTools:
         config.read(path)
 
         # PostgreSQL connection parameters
-        self.pg_database = config['POSTGRES']['DATABASE']
-        self.pg_host = config['POSTGRES']['HOST']
-        self.pg_port = config['POSTGRES']['PORT']
-        self.pg_user = config['POSTGRES']['USER']
-        self.pg_password = config['POSTGRES']['PASSWORD']
-        self.pg_schema = config['POSTGRES']['SCHEMA']
+        self.pg_database = config['DATABASE']['DATABASE']
+        self.pg_host = config['DATABASE']['HOST']
+        self.pg_port = config['DATABASE']['PORT']
+        self.pg_user = config['DATABASE']['USER']
+        self.pg_password = config['DATABASE']['PASSWORD']
+        self.pg_schema = config['DATABASE']['SCHEMA']
 
     def connect_db(self):
         """PostgreSQL 연결 생성"""
